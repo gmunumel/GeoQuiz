@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- App name -->
+    <string name="app_name">GeoQuiz</string>
+
+    <!-- Setting description -->
+    <string name="action_settings">Settings</string>
+
+    <!-- True text-->
+    <string name="true_button">True</string>
+
+    <!-- False text -->
+    <string name="false_button">False</string>
+
+    <!-- Correct Toast -->
+    <string name="correct_toast">Correct!</string>
+
+    <!-- Incorrect Toast -->
+    <string name="incorrect_toast">Incorrect!</string>
+
+    <!-- Next Question -->
+    <string name="next_button">Next</string>
+    
+    <!-- Previous Question | Challenge #2 -->
+    <string name="previous_button">Prev</string>
+
+    <!-- Next Question Image Button | Challenge #3 -->
+    <string name="next_image_button">Next</string>
+   
+    <!-- Previous Question Image Button | Challenge #3 -->
+    <string name="previous_image_button">Prev</string>
+
+    <!-- Question Ocean -->
+    <string name="question_oceans">The Pacific Ocean is larger than 
+    								the Atlantic Ocean.</string>
+    <!-- Question Mideast -->
+ 	<string name="question_mideast">The Suez Canal connects the Red Sea 
+    								and the Indian Ocean.</string>
+    <!-- Question Africa -->
+  	<string name="question_africa">The source of the Nile 
+  	    							River is in Egypt.</string>
+    <!-- Question Americas-->
+  	<string name="question_americas">The Amazon River is the longest river 
+    								in the Americas.</string>
+    <!-- Question Asia -->
+  	<string name="question_asia">Lake Baikal is the world\'s oldest and deepest 
+    								freshwater lake.</string>
+</resources>
