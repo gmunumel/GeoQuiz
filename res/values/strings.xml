@@ -46,4 +46,16 @@
     <!-- Question Asia -->
   	<string name="question_asia">Lake Baikal is the world\'s oldest and deepest 
     								freshwater lake.</string>
+    								
+  	<!-- Description Cheat button -->
+  	<string name="cheat_button">Cheat!</string>
+  	
+  	<!-- Message asking cheating -->
+    <string name="warning_text">Are you sure you want to do this?</string>
+    
+    <!-- Message showing the answer -->
+    <string name="show_answer_button">Show Answer</string>
+    
+    <!-- Message showing cheating is wrong -->
+    <string name="judgment_toast">Cheating is wrong.</string>
 </resources>

@@ -15,6 +15,8 @@ public class QuizActivity extends Activity {
 
 	// adding log TAG
 	private static final String TAG = "QuizActivity";
+	// storage index to don't loss question in screen changing
+	private static final String KEY_INDEX = "index";
 	
 	private Button mTrueButton;
 	private Button mFalseButton;
@@ -40,8 +42,19 @@ public class QuizActivity extends Activity {
     private int mCurrentIndex = 0;
     
     private void updateQuestion(){
-    	int question = mQuestionBank[mCurrentIndex].getQuestion();
-    	mQuestionTextView.setText(question);
+        // Log a message at "debug" log level
+        //mCurrentIndex = -23;
+    	//Log.d(TAG, "Updating question text for question #" + mCurrentIndex, 
+    	//          new Exception());
+        Log.d(TAG, "Current question index: " + mCurrentIndex);
+        int question;
+        try {
+            question = mQuestionBank[mCurrentIndex].getQuestion();
+            mQuestionTextView.setText(question);
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            // Log a message at "error" log level, along with an exception stack trace
+            Log.e(TAG, "Index was out of bounds", ex);
+        }
     }
     
     private void checkAnswer(boolean userPressedTrue) {
@@ -134,8 +147,20 @@ public class QuizActivity extends Activity {
             }
         });
         
-        
+        // get the saved current index 
+        if (savedInstanceState != null) {
+            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+        } 
+
         updateQuestion();
+    }
+
+    // keep the index question through screen changes
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        Log.i(TAG, "onSaveInstanceState");
+        savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
     }
 
     @Override
