@@ -54,7 +54,8 @@ public class QuizActivity extends Activity {
         int question;
         try {
         	// assumption not cheater on new question
-        	mIsCheater = false;
+        	//mIsCheater = false;
+        	mIsCheater = mQuestionBank[mCurrentIndex].getIsCheater();
             question = mQuestionBank[mCurrentIndex].getQuestion();
             mQuestionTextView.setText(question);
         } catch (ArrayIndexOutOfBoundsException ex) {
@@ -87,6 +88,7 @@ public class QuizActivity extends Activity {
           return;
         }
         mIsCheater = data.getBooleanExtra(CheatActivity.EXTRA_ANSWER_SHOWN, false);
+        mQuestionBank[mCurrentIndex].setIsCheater(mIsCheater);
     }
     
     @Override
