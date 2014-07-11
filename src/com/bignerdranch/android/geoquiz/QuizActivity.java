@@ -1,6 +1,7 @@
 package com.bignerdranch.android.geoquiz;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -17,10 +18,12 @@ public class QuizActivity extends Activity {
 	private static final String TAG = "QuizActivity";
 	// storage index to don't loss question in screen changing
 	private static final String KEY_INDEX = "index";
+	private static final String KEY_IS_CHEATER= "is_cheater";
 	
 	private Button mTrueButton;
 	private Button mFalseButton;
 	private Button mNextButton;
+	private Button mCheatButton;
 	private TextView mQuestionTextView;
 	
 	// challenge #1
@@ -40,6 +43,7 @@ public class QuizActivity extends Activity {
     };
     
     private int mCurrentIndex = 0;
+    private boolean mIsCheater;
     
     private void updateQuestion(){
         // Log a message at "debug" log level
@@ -49,6 +53,8 @@ public class QuizActivity extends Activity {
         Log.d(TAG, "Current question index: " + mCurrentIndex);
         int question;
         try {
+        	// assumption not cheater on new question
+        	mIsCheater = false;
             question = mQuestionBank[mCurrentIndex].getQuestion();
             mQuestionTextView.setText(question);
         } catch (ArrayIndexOutOfBoundsException ex) {
@@ -62,13 +68,25 @@ public class QuizActivity extends Activity {
         
         int messageResId = 0;
         
-        if (userPressedTrue == answerIsTrue) {
-            messageResId = R.string.correct_toast;
+        if (mIsCheater) {
+            messageResId = R.string.judgment_toast;
         } else {
-            messageResId = R.string.incorrect_toast;
+        	if (userPressedTrue == answerIsTrue) {
+        		messageResId = R.string.correct_toast;
+        	} else {
+        		messageResId = R.string.incorrect_toast;
+        	}
         }
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
             .show();
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null) {
+          return;
+        }
+        mIsCheater = data.getBooleanExtra(CheatActivity.EXTRA_ANSWER_SHOWN, false);
     }
     
     @Override
@@ -77,6 +95,13 @@ public class QuizActivity extends Activity {
         Log.d(TAG, "onCreate(Bundle) called");
         setContentView(R.layout.activity_quiz);
         
+        // get the saved current index and cheater value
+        // through screen changes
+        if (savedInstanceState != null) {
+            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+            mIsCheater = savedInstanceState.getBoolean(KEY_IS_CHEATER);
+        } 
+
         // adding the first question
         mQuestionTextView = (TextView)findViewById(R.id.question_text_view);
         
@@ -147,20 +172,29 @@ public class QuizActivity extends Activity {
             }
         });
         
-        // get the saved current index 
-        if (savedInstanceState != null) {
-            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
-        } 
-
+        // adding cheat button
+        mCheatButton = (Button)findViewById(R.id.cheat_button);
+        mCheatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            	Intent i = new Intent(QuizActivity.this, CheatActivity.class);
+            	boolean answerIsTrue = mQuestionBank[mCurrentIndex].isTrueQuestion();
+                i.putExtra(CheatActivity.EXTRA_ANSWER_IS_TRUE, answerIsTrue);
+                startActivityForResult(i, 0);
+            }
+        });
+        
         updateQuestion();
     }
 
-    // keep the index question through screen changes
+    // keep the index question and cheater value 
+    // through screen changes
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         Log.i(TAG, "onSaveInstanceState");
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+        savedInstanceState.putBoolean(KEY_IS_CHEATER, mIsCheater);
     }
 
     @Override
