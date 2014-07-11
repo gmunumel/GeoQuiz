@@ -1,7 +1,10 @@
 package com.bignerdranch.android.geoquiz;
 
+import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -26,6 +29,9 @@ public class QuizActivity extends Activity {
 	private Button mCheatButton;
 	private TextView mQuestionTextView;
 	
+	// show build version | challenge
+	private TextView mBuildVersionTextView;
+
 	// challenge #1
 	private LinearLayout mMainLinearLayout;
 	// challenge #2
@@ -53,8 +59,7 @@ public class QuizActivity extends Activity {
         Log.d(TAG, "Current question index: " + mCurrentIndex);
         int question;
         try {
-        	// assumption not cheater on new question
-        	//mIsCheater = false;
+        	// get cheated value from the question
         	mIsCheater = mQuestionBank[mCurrentIndex].getIsCheater();
             question = mQuestionBank[mCurrentIndex].getQuestion();
             mQuestionTextView.setText(question);
@@ -88,15 +93,24 @@ public class QuizActivity extends Activity {
           return;
         }
         mIsCheater = data.getBooleanExtra(CheatActivity.EXTRA_ANSWER_SHOWN, false);
+        // control of question 
+        // cheated by user
         mQuestionBank[mCurrentIndex].setIsCheater(mIsCheater);
     }
     
+    @TargetApi(11)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);      
         Log.d(TAG, "onCreate(Bundle) called");
+
         setContentView(R.layout.activity_quiz);
-        
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            ActionBar actionBar = getActionBar();
+            actionBar.setSubtitle("Bodies of Water");
+        }
+
         // get the saved current index and cheater value
         // through screen changes
         if (savedInstanceState != null) {
@@ -185,6 +199,10 @@ public class QuizActivity extends Activity {
                 startActivityForResult(i, 0);
             }
         });
+        
+        // adding build version text view
+        mBuildVersionTextView = (TextView)findViewById(R.id.build_version_text_view);
+        mBuildVersionTextView.setText("API level " + Build.VERSION.SDK_INT);
         
         updateQuestion();
     }

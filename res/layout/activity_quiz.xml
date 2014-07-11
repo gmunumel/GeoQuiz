@@ -67,4 +67,12 @@
        android:contentDescription="@string/next_image_button"
        android:src="@drawable/arrow_right" />
   </LinearLayout>
+  
+  <!-- Adding Build Version | Challenge -->
+  <TextView
+    android:id="@+id/build_version_text_view"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="12dp" />
+
 </LinearLayout>

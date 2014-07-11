@@ -5,6 +5,10 @@ public class TrueFalse {
 	
 	private boolean mTrueQuestion;
 	
+	// adding new instance variable
+	// to get a control of those
+	// question which were cheated
+	// by user
 	private boolean mIsCheater;
 	
 	public TrueFalse(int question, boolean trueQuestion) {
